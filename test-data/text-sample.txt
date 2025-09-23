@@ -1,0 +1,5 @@
+Building the MVP
+
+Value proposition: AI document assistant that extracts exactly what you ask for in plain English, converts it to Excel spreadsheets, then creates actionable reports
+
+Target users: Finance analysts, legal assistants, operations managers who need document data but lack technical resources.
