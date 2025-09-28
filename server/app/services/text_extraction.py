@@ -1,8 +1,12 @@
 from pathlib import Path
 from PyPDF2 import PdfReader
-import easyocr
 from spire.doc import *
 from spire.doc.common import *
+import fitz
+import pytesseract 
+from PIL import Image
+import io
+import easyocr
 
 
 class ExtractText:
@@ -31,15 +35,27 @@ class ExtractText:
         
         
     def pdf_extractor(self, file_path):
-        reader = PdfReader(file_path)
+        doc = fitz.open(file_path)
 
         all_text = ""
         
-        for page in reader.pages:
-            all_text += page.extract_text()
+        for page in doc: 
+            text = page.get_text()
+            if text.strip():
+                all_text += text
+            else: 
+                pix = page.get_pixmap()
+                img_data = pix.tobytes("png")
+                
+                image = Image.open(io.BytesIO(img_data))
+                extracted_text = pytesseract.image_to_string(image)
+                all_text += extracted_text + " "
 
+
+        doc.close()
         self.text.append(all_text)
         return all_text
+
 
     
     def image_extractor(self, file_path):

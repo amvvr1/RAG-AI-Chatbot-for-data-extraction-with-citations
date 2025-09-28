@@ -1,14 +1,16 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional,  List
 
+class Request(BaseModel):
+    query: str
 
 class Citation(BaseModel):
-    document: str
     text: str
+    document_name: str
+    page_number: Optional[int]
 
 class Response(BaseModel):
     answer: str
-    citations: List[Citation]
-
+    citation: List[Citation]
 
 

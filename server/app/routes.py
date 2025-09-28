@@ -1,16 +1,25 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from services.query_engine import QueryEngine
 from typing import List
-
+from schemas import Response, Request
+import os
+import shutil
+from pathlib import Path
+import chromadb
 
 app = FastAPI()
+
+engine = None
 
 query_engine = QueryEngine()
 
 @app.post("/uploadmultiplefiles")
 def create_upload_files(files: List[UploadFile] = File(...)):
+    global engine
     uploaded_files = []
     file_paths = []
+
+    os.makedirs("uploads", exist_ok=True)
 
     for file in files: 
         uploaded_files.append(file.filename)
@@ -21,27 +30,70 @@ def create_upload_files(files: List[UploadFile] = File(...)):
 
         file_paths.append(file_path)
     
-    full_index = []
+    index = query_engine.build_index(file_paths=file_paths)
 
-    for file_path in file_paths:
-        file_index = query_engine.build_index(file_path)
-        full_index.extend(file_index)
-
-    engine = query_engine.build_query_engine_from_index(index= full_index)
+    engine = query_engine.build_query_engine(index=index)
 
     return {"message" : "files uploaded successfully and ready for querying",
              "filenames" : uploaded_files}
 
+def clear_uploads():
+    dir_path = Path("uploads")
+    if dir_path.exists():
+        for item in dir_path.iterdir():
+            if item.is_file():
+                item.unlink()
+            else: 
+                shutil.rmtree(item)
+
+def format_text(text):
+    text = text.replace('\\n', ' ')
+    text = ' '.join(text.split())
+    return text
 
 
-@app.post("/questions/")
-def get_response(query: str, file_path: str) -> str:
-    response = query_engine.query(query)
+@app.post("/questions/", response_model=Response)
+def get_response(query: Request):
+    if engine is None:  
+        raise HTTPException(status_code=400, detail="Please start by uploading documents first")
 
+    response = engine.query(query.query)
+ 
+    citations = []
+
+
+    for node in response.source_nodes:
+        raw_text = node.node.text
+        formatted_text = format_text(raw_text)
+        citations.append(
+            {
+                "document_name" : node.node.metadata.get("filename", "Unknown"),
+                "text": formatted_text,
+                "page_number" : node.node.metadata.get("page_number", "N/A")
+            }
+        )
     return {
         "answer" : response.response,
-        "citation" : response.source_nodes
+        "citation" : citations      
     }
 
 
+  
+
+@app.delete("/clear-uploads")
+def delete_uploads_and_clear_index():
+    global engine
+
+    clear_uploads()
+
+    if engine is not None:
+        try: 
+            chroma_client = chromadb.PersistentClient(path="./chroma_db")
+            chroma_client.delete_collection("doc_collection")
+        except Exception:
+            pass
+
+    engine = None
+    
+    return f"files cleared successfully"
 
