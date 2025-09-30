@@ -6,8 +6,15 @@ import os
 import shutil
 from pathlib import Path
 import chromadb
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(CORSMiddleware,
+    allow_origins=["http://localhost:3000"], 
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 engine = None
 
@@ -96,4 +103,25 @@ def delete_uploads_and_clear_index():
     engine = None
     
     return f"files cleared successfully"
+
+
+@app.get("/uploaded-files/")
+def list_uploaded_files():
+    upload_directory = "uploads"
+    
+    try:
+        files = os.listdir(upload_directory)
+        return {"files" : files}
+    
+    except FileNotFoundError:
+        return {"message" : "No Uploaded Files Found"}
+    
+    except Exception as e:
+        return {"error" : str(e)}
+    
+
+
+
+    
+
 
