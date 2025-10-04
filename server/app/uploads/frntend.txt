@@ -1,0 +1,6 @@
+frontend: 
+- 1st step components:
+  - header section 
+  - step indicator
+  - file upload
+  - step indicator

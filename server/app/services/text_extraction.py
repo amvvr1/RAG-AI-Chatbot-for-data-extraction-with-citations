@@ -6,7 +6,6 @@ import fitz
 import pytesseract 
 from PIL import Image
 import io
-import easyocr
 
 
 class ExtractText:
@@ -59,8 +58,9 @@ class ExtractText:
 
     
     def image_extractor(self, file_path):
-        reader = easyocr.Reader(['en'])
-        img_txt = reader.readtext(file_path)
+        img = Image.open(file_path)
+
+        img_txt = pytesseract.image_to_string(img)
 
         extracted_text = " ".join([result[1] for result in img_txt])
 

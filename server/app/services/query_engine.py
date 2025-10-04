@@ -1,5 +1,5 @@
 import chromadb
-from services.text_extraction import ExtractText
+from .text_extraction import ExtractText
 from llama_index.core.query_engine import CitationQueryEngine
 from llama_index.core import VectorStoreIndex, StorageContext, Document
 from llama_index.embeddings.openai import OpenAIEmbedding
