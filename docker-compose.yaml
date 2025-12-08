@@ -9,15 +9,5 @@ services:
     ports:
       - "3000:3000"
 
-  db:
-    image: postgres
-    restart: always
-    shm_size: 128mb
-    environment:
-      POSTGRES_PASSWORD: postgres
-
-    ports:
-      - "3002:5432" 
-
 
 
