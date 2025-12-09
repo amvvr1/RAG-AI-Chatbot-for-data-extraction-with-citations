@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional,  List
 
-class Request(BaseModel):
+class ChatRequest(BaseModel):
     query: str
 
 
