@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
-from services.query_engine import QueryEngine
+from app.services.query_engine import QueryEngine
 from typing import List
-from schemas import Response, ChatRequest
+from app.schemas import Response, ChatRequest
 import os
 import shutil
 from pathlib import Path
