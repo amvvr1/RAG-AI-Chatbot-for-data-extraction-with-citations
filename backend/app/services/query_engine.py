@@ -1,4 +1,5 @@
 import chromadb
+from chromadb.config import Settings
 from .text_extraction import ExtractText
 from llama_index.core.query_engine import CitationQueryEngine
 from llama_index.core import VectorStoreIndex, StorageContext, Document
@@ -21,7 +22,7 @@ class QueryEngine:
         if isinstance(file_paths, str):
             file_paths = [file_paths]
 
-        chroma_client = chromadb.PersistentClient(path="./chroma_db")
+        chroma_client = chromadb.EphemeralClient(settings=Settings())
         doc_collection = chroma_client.get_or_create_collection("doc_collection")
         doc_vector_store = ChromaVectorStore(chroma_collection=doc_collection)
         doc_storage_context = StorageContext.from_defaults(vector_store=doc_vector_store)
@@ -61,27 +62,6 @@ class QueryEngine:
         
         
     
-"""    def build_pdf_doc(self, file_path):
-        reader = PdfReader(file_path)
-
-        docs = []
-
-        for page_num, page in enumerate(reader.pages, 1):
-            text = page.extract_text()
-            if text.strip(): 
-                doc = Document(
-                    text = text,
-                    metadata = {
-                        "filename" : os.path.basename(file_path), 
-                        "page_number" : page_num
-                    }
-                )
-            
-                docs.append(doc)
-        
-        return docs
-"""
-        
         
 
 

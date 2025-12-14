@@ -14,4 +14,5 @@ pymupdf
 spire.doc
 llama-index-llms-openai
 slowapi
-pysqlite3-binary
+
+
