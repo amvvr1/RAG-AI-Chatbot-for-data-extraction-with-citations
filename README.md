@@ -28,7 +28,7 @@ An intelligent document analysis application that allows users to upload their d
 ### Prerequisites
 
 - Node.js (v14 or higher)
-- Python 3.8+
+- Python 3.11
 - OpenAI API key
 
 ### Installation
@@ -82,3 +82,11 @@ The application uses a Retrieval-Augmented Generation (RAG) architecture:
 4. LlamaIndex orchestrates the retrieval and response generation process
 5. Responses include citations showing the source document
 
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Contact
+
+- **email:** scholarammar@gmail.com
