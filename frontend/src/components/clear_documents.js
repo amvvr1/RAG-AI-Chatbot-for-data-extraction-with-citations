@@ -9,7 +9,7 @@ function ClearDocuments({ onReset }) {
         setClearStatus('Clearing documents...');
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/clear-uploads', {
+            const response = await fetch('https://docuapp-gbe3fyfae6c9bth6.centralus-01.azurewebsites.net/clear-uploads', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
