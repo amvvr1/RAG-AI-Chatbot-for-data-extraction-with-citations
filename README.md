@@ -1,6 +1,6 @@
-# AI DOCUMENT Q&A ASSISTANT
+# RAG-AI-Chatbot-for-data-extraction-with-citations
 
-An intelligent document analysis application that allows users to upload their documents and ask questions about their content. The system provides accurate answers with source attribution, showing exactly which document the information came from.
+An intelligent document analysis application that allows users to upload their documents and ask questions about their content. The system provides accurate answers with source attribution and zero hallucinations, showing exactly which document the information came from.
 
 ## VIDEO DEMO
 
